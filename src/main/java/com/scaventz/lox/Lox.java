@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 
 /**
  * @author Xin Wang
@@ -15,7 +16,7 @@ public class Lox {
 
     static boolean hadError = false;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         if (args.length > 1) {
             System.out.println("Usage: jlox [script]");
             // exit codes stick to the conventions defined in the UNIX "sysexits.h" header
@@ -42,7 +43,7 @@ public class Lox {
 
         for (; ; ) {
             System.out.println("> ");
-            // To kill an interactive command-line app, you usually type Control-D. Doing so signals an “end-of-file” condition to the program.
+            // To kill an interactive command-line app, you usually type Control-D. Doing so signals an "end-of-file" condition to the program.
             // When that happens readLine() returns null, so we check for that to exit the loop
             final String line = reader.readLine();
             if (line == null)
@@ -57,19 +58,28 @@ public class Lox {
         final Scanner scanner = new Scanner(source);
         List<Token> tokens = scanner.scanTokens();
 
-        for (Token token : tokens) {
-            System.out.println(token);
-        }
+        final Parser parser = new Parser(tokens);
+        final Expr expression = parser.parse();
+
+        // stop if there was an syntax error
+        if(hadError) return;
+        System.out.println(new AstPrinter().print(expression));
     }
 
     static void error(int line, String message) {
         report(line, "", message);
     }
 
+    static void error(Token token, String message) {
+        if (token.type == TokenType.EOF) {
+            report(token.line, " at end", message);
+        } else {
+            report(token.line, " at '" + token.lexeme + "'", message);
+        }
+    }
+
     private static void report(int line, String where, String message) {
         System.out.println("[line " + line + "] Error" + where + ": " + message);
         hadError = true;
     }
-
-
 }
