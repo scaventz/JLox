@@ -1,2 +1,2 @@
-rootProject.name = "JLOX"
+rootProject.name = "JLox"
 
