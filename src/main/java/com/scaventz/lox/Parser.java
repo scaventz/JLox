@@ -4,13 +4,13 @@ import java.util.List;
 
 /**
  * <p>
- * expression     → equality ;
- * equality       → comparison ( ( "!=" | "==" ) comparison )* ;
- * comparison     → term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
- * term           → factor ( ( "-" | "+" ) factor )* ;
- * factor         → unary ( ( "/" | "*" ) unary )* ;
- * unary          → ( "!" | "-" ) unary | primary ;
- * primary        → NUMBER | STRING | "true" | "false" | "nil" | "(" expression ")" ;
+ * expression     -> equality ;
+ * equality       -> comparison ( ( "!=" | "==" ) comparison )* ;
+ * comparison     -> term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
+ * term           -> factor ( ( "-" | "+" ) factor )* ;
+ * factor         -> unary ( ( "/" | "*" ) unary )* ;
+ * unary          -> ( "!" | "-" ) unary | primary ;
+ * primary        -> NUMBER | STRING | "true" | "false" | "nil" | "(" expression ")" ;
  */
 public class Parser {
     private final List<Token> tokens;
@@ -93,7 +93,7 @@ public class Parser {
         return expr;
     }
 
-    // primary → NUMBER | STRING | "true" | "false" | "nil" | "(" expression ")" ;
+    // primary -> NUMBER | STRING | "true" | "false" | "nil" | "(" expression ")" ;
     private Expr primary() {
         if (match(TokenType.FALSE)) return new Expr.Literal(false);
         if (match(TokenType.TRUE)) return new Expr.Literal(true);

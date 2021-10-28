@@ -1,5 +1,7 @@
 package com.scaventz.lox;
 
+import com.scaventz.lox.exception.UnexpectedCharacterException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,18 +36,19 @@ public class Scanner {
         keywords.put("while", TokenType.WHILE);
     }
 
-    Scanner(String source) {
+    public Scanner(String source) {
         this.source = source;
     }
 
-    List<Token> scanTokens() {
+    public List<Token> scanTokens() {
         while (!isAtEnd()) {
             // we are at the beginning of the next lexeme
             start = current;
             scanToken();
         }
 
-        tokens.add(new Token(TokenType.EOF, "", null, line));
+        // TODO report column correctly
+        tokens.add(new Token(TokenType.EOF, "", null, line, 0));
         return tokens;
     }
 
@@ -123,10 +126,16 @@ public class Scanner {
                 } else if (isAlpha(c)) {
                     identifier();
                 } else {
-                    Lox.error(line, "Unexpected character.");
+                    // TODO support reporting column
+                    reportUnexpectedCharacter(c, line, 0);
                 }
                 break;
         }
+    }
+
+    private void reportUnexpectedCharacter(char c, int line, int column) {
+        Lox.error(line, column, "Unexpected character '" + c + "'.");
+        Lox.hadError = true;
     }
 
     private void identifier() {
@@ -177,7 +186,8 @@ public class Scanner {
         }
 
         if (isAtEnd()) {
-            Lox.error(line, "Unterminated string.");
+            // TODO report column correctly
+            Lox.error(line, 0, "Unterminated string.");
             return;
         }
 
@@ -212,6 +222,7 @@ public class Scanner {
 
     private void addToken(TokenType type, Object literal) {
         String text = source.substring(start, current);
-        new Token(type, text, literal, line);
+        // TODO report column correctly
+        new Token(type, text, literal, line, 0);
     }
 }

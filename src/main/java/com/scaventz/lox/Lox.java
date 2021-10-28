@@ -3,16 +3,21 @@ package com.scaventz.lox;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+import static com.scaventz.lox.Lox.ErrorLevel.ERROR;
+
 public class Lox {
 
-    static boolean hadError = false;
+    public static boolean hadError = false;
 
     public static void main(String[] args) throws IOException {
+        System.setOut(new PrintStream(System.out, true, "UTF-8"));
+        System.setErr(new PrintStream(System.out, true, "UTF-8"));
         if (args.length > 1) {
             System.out.println("Usage: jlox [script]");
             // exit codes stick to the conventions defined in the UNIX "sysexits.h" header
@@ -61,20 +66,32 @@ public class Lox {
         System.out.println(new AstPrinter().print(expression));
     }
 
-    static void error(int line, String message) {
-        report(line, "", message);
+    // TODO report column correctly
+    static void error(int line, int column, String message) {
+        report(line, 0, ERROR, "", message);
     }
 
     static void error(Token token, String message) {
         if (token.type == TokenType.EOF) {
-            report(token.line, " at end", message);
+            report(token.line, token.column, ERROR, " at end", message);
         } else {
-            report(token.line, " at '" + token.lexeme + "'", message);
+            report(token.line, token.column, ERROR, " at '" + token.lexeme + "'", message);
         }
     }
 
-    private static void report(int line, String where, String message) {
-        System.out.println("[line " + line + "] Error" + where + ": " + message);
+    private static void report(int line, int column, ErrorLevel level, String where, String message) {
+        System.err.println("[line " + line + ", column " + column + "] " + level.level + where + ": " + message);
         hadError = true;
+    }
+
+    enum ErrorLevel {
+        WARNING("warning"),
+        ERROR("error");
+
+        private final String level;
+
+        ErrorLevel(String level) {
+            this.level = level;
+        }
     }
 }
