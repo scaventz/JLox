@@ -1,9 +1,5 @@
 package com.scaventz.lox;
 
-/**
- * @author Xin Wang
- * @date 5/6/2021
- */
 enum TokenType {
     // single character tokens
     LEFT_PAREN,

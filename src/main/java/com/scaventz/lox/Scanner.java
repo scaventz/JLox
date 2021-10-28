@@ -1,15 +1,10 @@
 package com.scaventz.lox;
 
-import javax.xml.soap.Text;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @author Xin Wang
- * @date 5/6/2021
- */
 public class Scanner {
     private final String source;
     private final List<Token> tokens = new ArrayList<>();

@@ -8,10 +8,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-/**
- * @author Xin Wang
- * @date 5/6/2021
- */
 public class Lox {
 
     static boolean hadError = false;
@@ -46,8 +42,7 @@ public class Lox {
             // To kill an interactive command-line app, you usually type Control-D. Doing so signals an "end-of-file" condition to the program.
             // When that happens readLine() returns null, so we check for that to exit the loop
             final String line = reader.readLine();
-            if (line == null)
-                break;
+            if (line == null) break;
             run(line);
             // We need to reset this flag in the interactive loop. If the user makes a mistake, it shouldn’t kill their entire session.
             hadError = false;
@@ -62,7 +57,7 @@ public class Lox {
         final Expr expression = parser.parse();
 
         // stop if there was an syntax error
-        if(hadError) return;
+        if (hadError) return;
         System.out.println(new AstPrinter().print(expression));
     }
 

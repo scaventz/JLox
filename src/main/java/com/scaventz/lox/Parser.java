@@ -3,8 +3,6 @@ package com.scaventz.lox;
 import java.util.List;
 
 /**
- * @author Xin Wang
- * @date 5/8/2021
  * <p>
  * expression     → equality ;
  * equality       → comparison ( ( "!=" | "==" ) comparison )* ;

@@ -1,9 +1,5 @@
 package com.scaventz.lox;
 
-/**
- * @author Xin Wang
- * @date 5/7/2021
- */
 public class AstPrinter implements Expr.Visitor<String> {
 
     String print(Expr expr) {

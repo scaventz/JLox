@@ -6,10 +6,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * @author Xin Wang
- * @date 5/7/2021
- */
 public class GenerateAST {
     public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException {
         args = new String[]{"D:\\Github-scaventz\\JLOX\\src\\main\\java\\com\\scaventz\\lox"};
