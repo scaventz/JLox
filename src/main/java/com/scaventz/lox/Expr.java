@@ -1,7 +1,8 @@
 package com.scaventz.lox;
-// There’s no technical need for putting all expression subclasses under Expr,
+
+// There is no technical need for putting all expression subclasses under Expr,
 // but it lets us cram all the classes into a single Java file.
-abstract class Expr {
+abstract class Expr{
     interface Visitor<R> {
         R visitBinaryExpr(Binary expr);
         R visitGroupingExpr(Grouping expr);
@@ -9,7 +10,7 @@ abstract class Expr {
         R visitUnaryExpr(Unary expr);
     }
 
-    static class Binary extends Expr {
+    static class Binary extends Expr{
         Binary(Expr left, Token operator, Expr right) {
             this.left = left;
             this.operator = operator;
@@ -26,7 +27,7 @@ abstract class Expr {
         final Expr right;
     }
 
-    static class Grouping extends Expr {
+    static class Grouping extends Expr{
         Grouping(Expr expression) {
             this.expression = expression;
         }
@@ -39,7 +40,7 @@ abstract class Expr {
         final Expr expression;
     }
 
-    static class Literal extends Expr {
+    static class Literal extends Expr{
         Literal(Object value) {
             this.value = value;
         }
@@ -52,7 +53,7 @@ abstract class Expr {
         final Object value;
     }
 
-    static class Unary extends Expr {
+    static class Unary extends Expr{
         Unary(Token operator, Expr right) {
             this.operator = operator;
             this.right = right;
@@ -66,6 +67,7 @@ abstract class Expr {
         final Token operator;
         final Expr right;
     }
+
 
     abstract <R> R accept(Visitor<R> visitor);
 }
