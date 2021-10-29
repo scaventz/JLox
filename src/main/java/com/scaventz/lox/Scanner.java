@@ -1,7 +1,5 @@
 package com.scaventz.lox;
 
-import com.scaventz.lox.exception.UnexpectedCharacterException;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
