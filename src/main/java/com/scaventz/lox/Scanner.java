@@ -13,6 +13,7 @@ public class Scanner {
     private int start = 0;
     private int current = 0;
     private int line = 1;
+    private int column = 1;
 
     private static final Map<String, TokenType> keywords;
 
@@ -186,8 +187,7 @@ public class Scanner {
         }
 
         if (isAtEnd()) {
-            // TODO report column correctly
-            Lox.error(line, 0, "Unterminated string.");
+            Lox.error(line, column, "Unterminated string.");
             return;
         }
 
@@ -213,6 +213,7 @@ public class Scanner {
     }
 
     private char advance() {
+        column++;
         return source.charAt(current++);
     }
 

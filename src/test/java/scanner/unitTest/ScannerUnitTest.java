@@ -55,4 +55,14 @@ public class ScannerUnitTest {
         assert !Lox.hadError;
         assertEquals("", errContent.toString("UTF8"));
     }
+
+    @Test
+    public void unterminatedString() throws UnsupportedEncodingException {
+        String source = "\"unterminated string";
+        Scanner scanner = new Scanner(source);
+        scanner.scanTokens();
+
+        assert Lox.hadError;
+        assertEquals("[line 1, column 21] error: Unterminated string.\r\n", errContent.toString("UTF8"));
+    }
 }

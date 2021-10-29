@@ -66,9 +66,8 @@ public class Lox {
         System.out.println(new AstPrinter().print(expression));
     }
 
-    // TODO report column correctly
     static void error(int line, int column, String message) {
-        report(line, 0, ERROR, "", message);
+        report(line, column, ERROR, "", message);
     }
 
     static void error(Token token, String message) {
