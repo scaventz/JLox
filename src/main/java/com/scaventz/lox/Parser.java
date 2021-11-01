@@ -28,12 +28,16 @@ public class Parser {
         }
     }
 
-    // comparison ( ( "!=" | "==" ) comparison )* ;
+    /**
+     * comparison ( ( "!=" | "==" ) comparison )* ;
+     */
     private Expr expression() {
         return equality();
     }
 
-    // comparison ( ( "!=" | "==" ) comparison )* ;
+    /**
+     * comparison ( ( "!=" | "==" ) comparison )* ;
+     */
     private Expr equality() {
         Expr expr = comparison();
 
@@ -46,7 +50,9 @@ public class Parser {
         return expr;
     }
 
-    // comparison -> term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
+    /**
+     * comparison -> term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
+     */
     private Expr comparison() {
         Expr expr = term();
 
@@ -93,7 +99,9 @@ public class Parser {
         return expr;
     }
 
-    // primary -> NUMBER | STRING | "true" | "false" | "nil" | "(" expression ")" ;
+    /**
+     * primary -> NUMBER | STRING | "true" | "false" | "nil" | "(" expression ")" ;
+     */
     private Expr primary() {
         if (match(TokenType.FALSE)) return new Expr.Literal(false);
         if (match(TokenType.TRUE)) return new Expr.Literal(true);
