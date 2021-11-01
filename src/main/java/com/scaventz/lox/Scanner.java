@@ -46,8 +46,7 @@ public class Scanner {
             scanToken();
         }
 
-        // TODO report column correctly
-        tokens.add(new Token(TokenType.EOF, "", null, line, 0));
+        tokens.add(new Token(TokenType.EOF, "", null, line, column));
         return tokens;
     }
 
@@ -125,8 +124,7 @@ public class Scanner {
                 } else if (isAlpha(c)) {
                     identifier();
                 } else {
-                    // TODO support reporting column
-                    reportUnexpectedCharacter(c, line, 0);
+                    reportUnexpectedCharacter(c, line, column);
                 }
                 break;
         }

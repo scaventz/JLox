@@ -16,11 +16,11 @@ public class Parser {
     private final List<Token> tokens;
     private int current = 0;
 
-    Parser(List<Token> tokens) {
+    public Parser(List<Token> tokens) {
         this.tokens = tokens;
     }
 
-    Expr parse() {
+    public Expr parse() {
         try {
             return expression();
         } catch (ParseError error) {
