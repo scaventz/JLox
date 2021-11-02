@@ -1,5 +1,5 @@
 plugins {
-    java
+    application // implicitly applies java & distribution plugin
 }
 
 group = "me.scaventz"
@@ -22,4 +22,21 @@ tasks.getByName<Test>("test") {
 // generates distributionUrl=https\://services.gradle.org/distributions/gradle-7.2-all.zip
 tasks.wrapper {
     distributionType = Wrapper.DistributionType.ALL
+}
+
+application {
+    mainClass.set("com.scaventz.lox.Lox")
+}
+
+distributions {
+    main {
+        distributionBaseName.set("jlox")
+        contents {
+            from("src/main/resources/startup.bat")
+        }
+    }
+}
+
+tasks.jar {
+    archiveFileName.set("jlox.jar")
 }
