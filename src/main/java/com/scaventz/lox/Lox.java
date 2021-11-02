@@ -1,5 +1,7 @@
 package com.scaventz.lox;
 
+import com.scaventz.lox.exception.RuntimeError;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,8 +14,10 @@ import java.util.List;
 import static com.scaventz.lox.Lox.ErrorLevel.ERROR;
 
 public class Lox {
+    private static final Interpreter interpreter = new Interpreter();
 
     public static boolean hadError = false;
+    public static boolean hadRuntimeError = false;
 
     public static void main(String[] args) throws IOException {
         System.setOut(new PrintStream(System.out, true, "UTF-8"));
@@ -35,7 +39,8 @@ public class Lox {
         run(new String(bytes, Charset.defaultCharset()));
 
         // Indicate an error in the exit code.
-        if (hadError) System.exit(65); // EX_DATAERR (65)
+        if (hadError) System.exit(65);
+        if (hadRuntimeError) System.exit(70);
     }
 
     private static void runPrompt() throws IOException {
@@ -61,9 +66,9 @@ public class Lox {
         final Parser parser = new Parser(tokens);
         final Expr expression = parser.parse();
 
-        // stop if there was an syntax error
+        // stop if there was a syntax error
         if (hadError) return;
-        System.out.println(new AstPrinter().print(expression));
+        interpreter.interpret(expression);
     }
 
     static void error(int line, int column, String message) {
@@ -76,6 +81,12 @@ public class Lox {
         } else {
             report(token.line, token.column, ERROR, " at '" + token.lexeme + "'", message);
         }
+    }
+
+    static void runtimeError(RuntimeError error) {
+        System.err.println(error.getMessage() +
+                "\n[line " + error.token.line + ", column " + error.token.column + " ]");
+        hadRuntimeError = true;
     }
 
     private static void report(int line, int column, ErrorLevel level, String where, String message) {

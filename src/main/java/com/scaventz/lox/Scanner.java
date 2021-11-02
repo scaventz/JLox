@@ -219,7 +219,6 @@ public class Scanner {
 
     private void addToken(TokenType type, Object literal) {
         String text = source.substring(start, current);
-        // TODO report column correctly
-        new Token(type, text, literal, line, 0);
+        tokens.add(new Token(type, text, literal, line, column));
     }
 }

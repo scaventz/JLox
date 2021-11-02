@@ -33,7 +33,7 @@ public class ParserTest {
 
     @Test
     public void testUnclosedBracket() throws UnsupportedEncodingException {
-        String source = "a=(1+;";
+        String source = "var a=(1+;";
         final Scanner scanner = new Scanner(source);
         List<Token> tokens = scanner.scanTokens();
 
