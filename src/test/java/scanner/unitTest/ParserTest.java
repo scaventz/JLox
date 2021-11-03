@@ -32,7 +32,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testUnclosedBracket() throws UnsupportedEncodingException {
+    public void unclosedBracket() throws UnsupportedEncodingException {
         String source = "var a=(1+;";
         final Scanner scanner = new Scanner(source);
         List<Token> tokens = scanner.scanTokens();

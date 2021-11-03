@@ -32,7 +32,7 @@ public class ScannerUnitTest {
     }
 
     @Test
-    public void testIllegalCharactersTest() throws UnsupportedEncodingException {
+    public void illegalCharacters() throws UnsupportedEncodingException {
         String source = "@#^";
         Scanner scanner = new Scanner(source);
         scanner.scanTokens();
@@ -45,7 +45,7 @@ public class ScannerUnitTest {
     }
 
     @Test
-    public void expectNoErrorTest() throws UnsupportedEncodingException {
+    public void expectNoError() throws UnsupportedEncodingException {
         String source = "// this is a comment\n" +
                 "(( )){} // grouping stuff\n" +
                 "!*+-/=<> <= == // operators\n" +
@@ -58,7 +58,7 @@ public class ScannerUnitTest {
     }
 
     @Test
-    public void unterminatedStringTest() throws UnsupportedEncodingException {
+    public void unterminatedString() throws UnsupportedEncodingException {
         String source = "\"unterminated string";
         Scanner scanner = new Scanner(source);
         scanner.scanTokens();
