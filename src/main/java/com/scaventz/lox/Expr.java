@@ -2,7 +2,7 @@ package com.scaventz.lox;
 
 // There is no technical need for putting all expression subclasses under Expr,
 // but it lets us cram all the classes into a single Java file.
-public abstract class Expr{
+abstract class Expr{
     interface Visitor<R> {
         R visitBinaryExpr(Binary expr);
         R visitGroupingExpr(Grouping expr);

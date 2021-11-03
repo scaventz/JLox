@@ -1,9 +1,16 @@
 package com.scaventz.lox;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import static com.scaventz.lox.TokenType.PRINT;
+import static com.scaventz.lox.TokenType.SEMICOLON;
+
 /**
- * <p>
+ * program        -> statement* EOF
+ * statement      -> exprStmt | printStmt ;
+ * exprStmt       -> expression ";" ;
+ * printStmt      -> "print" expression ";" ;
  * expression     -> equality ;
  * equality       -> comparison ( ( "!=" | "==" ) comparison )* ;
  * comparison     -> term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
@@ -20,12 +27,13 @@ public class Parser {
         this.tokens = tokens;
     }
 
-    public Expr parse() {
-        try {
-            return expression();
-        } catch (ParseError error) {
-            return null;
+    public List<Stmt> parse() {
+        List<Stmt> statements = new ArrayList<>();
+        while (!isAtEnd()) {
+            statements.add(statement());
         }
+
+        return statements;
     }
 
     /**
@@ -33,6 +41,23 @@ public class Parser {
      */
     private Expr expression() {
         return equality();
+    }
+
+    private Stmt statement() {
+        if (match(PRINT)) return printStatement();
+        return expressionStatement();
+    }
+
+    private Stmt printStatement() {
+        Expr value = expression();
+        consume(SEMICOLON, "Expect ';' after value.");
+        return new Stmt.Print(value);
+    }
+
+    private Stmt expressionStatement() {
+        Expr expr = expression();
+        consume(SEMICOLON, "Expect ';' after expression.");
+        return new Stmt.Expression(expr);
     }
 
     /**
@@ -168,7 +193,7 @@ public class Parser {
     private void synchronize() {
         advance();
         while (!isAtEnd()) {
-            if (previous().type == TokenType.SEMICOLON) return;
+            if (previous().type == SEMICOLON) return;
             switch (peek().type) {
                 case CLASS:
                 case FUN:
