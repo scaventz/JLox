@@ -2,7 +2,7 @@ package com.scaventz.lox;
 
 // There is no technical need for putting all expression subclasses under Expr,
 // but it lets us cram all the classes into a single Java file.
-abstract class Stmt{
+public abstract class Stmt{
     interface Visitor<R> {
         R visitExpressionStmt(Expression stmt);
         R visitPrintStmt(Print stmt);

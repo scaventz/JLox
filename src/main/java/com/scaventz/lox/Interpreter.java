@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
-    void interpret(List<Stmt> statements) {
+    public void interpret(List<Stmt> statements) {
         try {
             for (Stmt statement : statements) {
                 execute(statement);
