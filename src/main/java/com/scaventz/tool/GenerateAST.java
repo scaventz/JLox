@@ -10,6 +10,7 @@ public class GenerateAST {
     public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException {
         String outputDir = "src/main/java/com/scaventz/lox";
         defineAst(outputDir, "Expr", Arrays.asList(
+                "Assign   : Token name, Expr value",
                 "Binary   : Expr left, Token operator, Expr right",
                 "Grouping : Expr expression",
                 "Literal  : Object value",

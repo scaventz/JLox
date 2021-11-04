@@ -12,7 +12,8 @@ import static com.scaventz.lox.TokenType.*;
  * statement      -> exprStmt | printStmt ;
  * exprStmt       -> expression ";" ;
  * printStmt      -> "print" expression ";" ;
- * expression     -> equality ;
+ * expression     -> assignment  ;
+ * assignment     -> IDENTIFIER "=" assignment | equality ;
  * equality       -> comparison ( ( "!=" | "==" ) comparison )* ;
  * comparison     -> term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
  * term           -> factor ( ( "-" | "+" ) factor )* ;
@@ -41,10 +42,10 @@ public class Parser {
     }
 
     /**
-     * comparison ( ( "!=" | "==" ) comparison )* ;
+     * expression -> assignment ;
      */
     private Expr expression() {
-        return equality();
+        return assignment();
     }
 
     private Stmt declaration() {
@@ -53,6 +54,7 @@ public class Parser {
             return statement();
         } catch (ParseError error) {
             synchronize();
+            Lox.hadError = true;
             return null;
         }
     }
@@ -84,6 +86,27 @@ public class Parser {
         Expr expr = expression();
         consume(SEMICOLON, "Expect ';' after expression.");
         return new Stmt.Expression(expr);
+    }
+
+    /**
+     * assignment -> IDENTIFIER "=" assignment | equality ;
+     */
+    private Expr assignment() {
+        Expr expr = equality();
+
+        if (match(EQUAL)) {
+            Token equals = previous();
+            Expr value = assignment();
+
+            if (expr instanceof Expr.Variable) {
+                Token name = ((Expr.Variable) expr).name;
+                return new Expr.Assign(name, value);
+            }
+
+            error(equals, "Invalid assignment target.");
+        }
+
+        return expr;
     }
 
     /**

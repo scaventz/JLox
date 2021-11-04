@@ -42,4 +42,17 @@ public class EnvironmentTest {
         assert !Lox.hadRuntimeError;
         assertEquals("3\r\n", outContent.toString("UTF8"));
     }
+
+    @Test
+    public void assignment() throws UnsupportedEncodingException {
+        String source = "var a = 1;a = 2;print a;";
+
+        List<Token> tokens = new Scanner(source).scanTokens();
+        List<Stmt> statements = new Parser(tokens).parse();
+        new Interpreter().interpret(statements);
+
+        assert !Lox.hadError;
+        assert !Lox.hadRuntimeError;
+        assertEquals("2\r\n", outContent.toString("UTF8"));
+    }
 }

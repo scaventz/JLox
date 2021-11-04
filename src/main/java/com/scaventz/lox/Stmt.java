@@ -2,16 +2,14 @@ package com.scaventz.lox;
 
 // There is no technical need for putting all expression subclasses under Expr,
 // but it lets us cram all the classes into a single Java file.
-public abstract class Stmt {
+public abstract class Stmt{
     interface Visitor<R> {
         R visitExpressionStmt(Expression stmt);
-
         R visitPrintStmt(Print stmt);
-
         R visitVarStmt(Var stmt);
     }
 
-    static class Expression extends Stmt {
+    static class Expression extends Stmt{
         Expression(Expr expression) {
             this.expression = expression;
         }
@@ -24,7 +22,7 @@ public abstract class Stmt {
         final Expr expression;
     }
 
-    static class Print extends Stmt {
+    static class Print extends Stmt{
         Print(Expr expression) {
             this.expression = expression;
         }
@@ -37,7 +35,7 @@ public abstract class Stmt {
         final Expr expression;
     }
 
-    static class Var extends Stmt {
+    static class Var extends Stmt{
         Var(Token name, Expr initializer) {
             this.name = name;
             this.initializer = initializer;
