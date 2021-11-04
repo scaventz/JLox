@@ -2,6 +2,12 @@ plugins {
     application // implicitly applies java & distribution plugin
 }
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
 group = "me.scaventz"
 version = "1.0-SNAPSHOT"
 
