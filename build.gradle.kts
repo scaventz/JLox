@@ -37,10 +37,6 @@ distributions {
     }
 }
 
-tasks.jar {
-    archiveFileName.set("jlox.jar")
-}
-
-tasks.named("distZip", Zip::class) {
-    archiveClassifier.set("AMD-64")
+tasks.assembleDist {
+    dependsOn(tasks.test)
 }
