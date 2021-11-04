@@ -47,6 +47,7 @@ public class InterpreterTest {
     }
 
     // TODO re-write and simplify relevant tests
+    // TODO Note Stmt is not a public type, which requires re-write this test
     private void runAndAssert(String source, String expected) throws UnsupportedEncodingException {
         List<Token> tokens = new Scanner(source).scanTokens();
         List<Stmt> statements = new Parser(tokens).parse();
