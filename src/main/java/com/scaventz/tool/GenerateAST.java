@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class GenerateAST {
@@ -16,20 +18,24 @@ public class GenerateAST {
                 "Literal  : Object value",
                 "Unary    : Token operator, Expr right",
                 "Variable : Token name"
-        ));
+        ), null);
 
         defineAst(outputDir, "Stmt", Arrays.asList(
                 "Block      : List<Stmt> statements",
                 "Expression : Expr expression",
                 "Print      : Expr expression",
                 "Var        : Token name, Expr initializer"
-        ));
+        ), Arrays.asList("import java.util.List;"));
     }
 
-    private static void defineAst(String outputDir, String baseName, List<String> types) throws FileNotFoundException, UnsupportedEncodingException {
+    private static void defineAst(String outputDir, String baseName, List<String> types, List<String> imports) throws FileNotFoundException, UnsupportedEncodingException {
         String path = outputDir + "/" + baseName + ".java";
         PrintWriter writer = new PrintWriter(path, "UTF-8");
         writer.println("package com.scaventz.lox;");
+        writer.println();
+        if (imports != null && !imports.isEmpty()) {
+            imports.forEach(writer::println);
+        }
         writer.println();
         writer.println("// There is no technical need for putting all expression subclasses under Expr,");
         writer.println("// but it lets us cram all the classes into a single Java file.");

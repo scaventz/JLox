@@ -50,8 +50,7 @@ public class InterpreterTest {
     // TODO Note Stmt is not a public type, which requires re-write this test
     private void runAndAssert(String source, String expected) throws UnsupportedEncodingException {
         List<Token> tokens = new Scanner(source).scanTokens();
-        List<Stmt> statements = new Parser(tokens).parse();
-        new Interpreter().interpret(statements);
+        new Interpreter().interpret(new Parser(tokens).parse());
 
         assert !Lox.hadError;
         assert !Lox.hadRuntimeError;

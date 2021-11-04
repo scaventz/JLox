@@ -46,3 +46,11 @@ distributions {
 tasks.assembleDist {
     dependsOn(tasks.test)
 }
+
+tasks.register<JavaExec>("generateAST") {
+    javaLauncher.set(javaToolchains.launcherFor {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    })
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("com.scaventz.tool.GenerateAST")
+}

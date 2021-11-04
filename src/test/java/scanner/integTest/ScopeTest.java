@@ -56,8 +56,7 @@ public class ScopeTest {
                 """;
 
         List<Token> tokens = new Scanner(source).scanTokens();
-        List<Stmt> statements = new Parser(tokens).parse();
-        new Interpreter().interpret(statements);
+        new Interpreter().interpret(new Parser(tokens).parse());
 
         assert !Lox.hadError;
         assert !Lox.hadRuntimeError;
