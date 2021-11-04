@@ -1,15 +1,13 @@
 package com.scaventz.tool;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 public class GenerateAST {
-    public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException {
+    public static void main(String[] args) throws IOException {
         String outputDir = "src/main/java/com/scaventz/lox";
         defineAst(outputDir, "Expr", Arrays.asList(
                 "Assign   : Token name, Expr value",
@@ -25,12 +23,12 @@ public class GenerateAST {
                 "Expression : Expr expression",
                 "Print      : Expr expression",
                 "Var        : Token name, Expr initializer"
-        ), Arrays.asList("import java.util.List;"));
+        ), List.of("import java.util.List;"));
     }
 
-    private static void defineAst(String outputDir, String baseName, List<String> types, List<String> imports) throws FileNotFoundException, UnsupportedEncodingException {
+    private static void defineAst(String outputDir, String baseName, List<String> types, List<String> imports) throws IOException {
         String path = outputDir + "/" + baseName + ".java";
-        PrintWriter writer = new PrintWriter(path, "UTF-8");
+        PrintWriter writer = new PrintWriter(path, StandardCharsets.UTF_8);
         writer.println("package com.scaventz.lox;");
         writer.println();
         if (imports != null && !imports.isEmpty()) {

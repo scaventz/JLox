@@ -35,8 +35,7 @@ public class EnvironmentTest {
         String source = "var a = 1;var b = 2;print a + b;";
 
         List<Token> tokens = new Scanner(source).scanTokens();
-        List<Stmt> statements = new Parser(tokens).parse();
-        new Interpreter().interpret(statements);
+        new Interpreter().interpret(new Parser(tokens).parse());
 
         assert !Lox.hadError;
         assert !Lox.hadRuntimeError;
@@ -48,8 +47,7 @@ public class EnvironmentTest {
         String source = "var a = 1;a = 2;print a;";
 
         List<Token> tokens = new Scanner(source).scanTokens();
-        List<Stmt> statements = new Parser(tokens).parse();
-        new Interpreter().interpret(statements);
+        new Interpreter().interpret(new Parser(tokens).parse());
 
         assert !Lox.hadError;
         assert !Lox.hadRuntimeError;

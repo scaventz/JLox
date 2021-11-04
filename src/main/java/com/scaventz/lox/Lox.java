@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -20,8 +21,8 @@ public class Lox {
     public static boolean hadRuntimeError = false;
 
     public static void main(String[] args) throws IOException {
-        System.setOut(new PrintStream(System.out, true, "UTF-8"));
-        System.setErr(new PrintStream(System.out, true, "UTF-8"));
+        System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8));
+        System.setErr(new PrintStream(System.out, true, StandardCharsets.UTF_8));
         if (args.length > 1) {
             System.out.println("Usage: jlox [script]");
             // exit codes stick to the conventions defined in the UNIX "sysexits.h" header
