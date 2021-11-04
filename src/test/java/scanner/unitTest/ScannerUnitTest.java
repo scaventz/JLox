@@ -39,9 +39,9 @@ public class ScannerUnitTest {
 
         assert Lox.hadError;
         assertEquals(
-                "[line 1, column 0] error: Unexpected character '@'.\r\n" +
-                        "[line 1, column 0] error: Unexpected character '#'.\r\n" +
-                        "[line 1, column 0] error: Unexpected character '^'.\r\n", errContent.toString("UTF8"));
+                "[line 1, column 2] error: Unexpected character '@'.\r\n" +
+                        "[line 1, column 3] error: Unexpected character '#'.\r\n" +
+                        "[line 1, column 4] error: Unexpected character '^'.\r\n", errContent.toString("UTF8"));
     }
 
     @Test

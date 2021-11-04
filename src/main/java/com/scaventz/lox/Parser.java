@@ -30,9 +30,11 @@ public class Parser {
     public List<Stmt> parse() {
         List<Stmt> statements = new ArrayList<>();
         while (!isAtEnd()) {
-            statements.add(statement());
+            Stmt stmt = statement();
+            if (stmt != null) {
+                statements.add(stmt);
+            }
         }
-
         return statements;
     }
 
@@ -44,8 +46,14 @@ public class Parser {
     }
 
     private Stmt statement() {
-        if (match(PRINT)) return printStatement();
-        return expressionStatement();
+        try {
+            if (match(PRINT)) return printStatement();
+            return expressionStatement();
+        } catch (ParseError e) {
+            Lox.error(e.token, e.message);
+            synchronize();
+            return null;
+        }
     }
 
     private Stmt printStatement() {
@@ -150,8 +158,7 @@ public class Parser {
     }
 
     private ParseError error(Token token, String message) {
-        Lox.error(token, message);
-        return new ParseError();
+        return new ParseError(token, message);
     }
 
     private boolean match(TokenType... types) {
@@ -188,6 +195,13 @@ public class Parser {
     }
 
     private static class ParseError extends RuntimeException {
+        private Token token;
+        private String message;
+
+        public ParseError(Token token, String message) {
+            this.token = token;
+            this.message = message;
+        }
     }
 
     private void synchronize() {
