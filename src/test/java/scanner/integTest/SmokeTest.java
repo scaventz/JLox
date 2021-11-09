@@ -12,7 +12,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ScopeTest {
+public class SmokeTest {
 
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
@@ -32,7 +32,47 @@ public class ScopeTest {
     }
 
     @Test
-    public void smoke() throws UnsupportedEncodingException {
+    public void forLoop() throws UnsupportedEncodingException {
+        String source = """
+                var a = 0;
+                var temp;
+                            
+                for (var b = 1; a < 1000; b = temp + b) {
+                  print a;
+                  temp = a;
+                  a = b;
+                }
+                """;
+
+        List<Token> tokens = new Scanner(source).scanTokens();
+        new Interpreter().interpret(new Parser(tokens).parse());
+
+        assert !Lox.hadError;
+        assert !Lox.hadRuntimeError;
+        String expected = """
+                0
+                1
+                1
+                2
+                3
+                5
+                8
+                13
+                21
+                34
+                55
+                89
+                144
+                233
+                377
+                610
+                987
+                """;
+        assertEquals(expected, outContent.toString("UTF8").replace("\r", ""));
+    }
+
+    @Test
+    public void scopeTest() throws UnsupportedEncodingException {
         String source = """
                 var a = "global a";
                 var b = "global b";
