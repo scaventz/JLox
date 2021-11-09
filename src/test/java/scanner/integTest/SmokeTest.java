@@ -216,4 +216,33 @@ public class SmokeTest {
         assert !Lox.hadError;
         assert !Lox.hadRuntimeError;
     }
+
+    @Test
+    public void staticScopeTest() {
+        String source = """
+                var a = "global";
+                {
+                  fun showA() {
+                    print a;
+                  }
+                
+                  showA();
+                  var a = "block";
+                  showA();
+                }
+                """;
+
+        List<Token> tokens = new Scanner(source).scanTokens();
+        new Interpreter().interpret(new Parser(tokens).parse());
+
+        String expected = """
+                global
+                block
+                """;
+        assertEquals("", errContent.toString(StandardCharsets.UTF_8).replace("\r", ""));
+        assertEquals(expected, outContent.toString(StandardCharsets.UTF_8).replace("\r", ""));
+
+        assert !Lox.hadError;
+        assert !Lox.hadRuntimeError;
+    }
 }
