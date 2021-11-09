@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,7 +33,7 @@ public class SmokeTest {
     }
 
     @Test
-    public void forLoop() throws UnsupportedEncodingException {
+    public void forLoop() {
         String source = """
                 var a = 0;
                 var temp;
@@ -68,11 +69,11 @@ public class SmokeTest {
                 610
                 987
                 """;
-        assertEquals(expected, outContent.toString("UTF8").replace("\r", ""));
+        assertEquals(expected, outContent.toString(StandardCharsets.UTF_8).replace("\r", ""));
     }
 
     @Test
-    public void scopeTest() throws UnsupportedEncodingException {
+    public void scopeTest() {
         String source = """
                 var a = "global a";
                 var b = "global b";
@@ -112,6 +113,31 @@ public class SmokeTest {
                 global b
                 global c
                 """;
-        assertEquals(expected, outContent.toString("UTF8").replace("\r", ""));
+        assertEquals(expected, outContent.toString(StandardCharsets.UTF_8).replace("\r", ""));
+    }
+
+    @Test
+    public void functionToStringTest() {
+        String source = """
+                fun add(a, b) {
+                  print a + b;
+                }
+                                
+                print add; // "<fn add>".
+                """;
+
+        List<Token> tokens = new Scanner(source).scanTokens();
+        new Interpreter().interpret(new Parser(tokens).parse());
+
+        String expected = """
+                <fn add>
+                """;
+        assertEquals("", errContent.toString(StandardCharsets.UTF_8).replace("\r", ""));
+        assertEquals(expected, outContent.toString(StandardCharsets.UTF_8).replace("\r", ""));
+
+        assert !Lox.hadError;
+        assert !Lox.hadRuntimeError;
+
+
     }
 }

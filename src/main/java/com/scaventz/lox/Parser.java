@@ -61,6 +61,7 @@ public class Parser {
 
     private Stmt declaration() {
         try {
+            if (match(FUN)) return function("function");
             if (match(VAR)) return varDeclaration();
             return statement();
         } catch (ParseError error) {
@@ -71,7 +72,7 @@ public class Parser {
     }
 
     private Stmt statement() {
-        if (match(FUN)) return function("function");
+        // if (match(FUN)) return function("function");
         if (match(FOR)) return forStatement();
         if (match(IF)) return ifStatement();
         if (match(PRINT)) return printStatement();
