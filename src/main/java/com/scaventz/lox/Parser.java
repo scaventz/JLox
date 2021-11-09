@@ -8,7 +8,10 @@ import static com.scaventz.lox.TokenType.*;
 
 /**
  * program        -> declaration* EOF ;
- * declaration    -> varDecl | statement ;
+ * declaration    -> funDecl | varDecl | statement ;
+ * funDecl        -> "fun" function ;
+ * function       -> IDENTIFIER "(" parameters? ")" block ;
+ * parameters     -> IDENTIFIER ( "," IDENTIFIER )* ;
  * varDecl        -> "var" IDENTIFIER ( "=" expression )? ";" ;
  * statement      -> exprStmt | forStmt | ifStmt | printStmt | whileStmt | block ;
  * forStmt        -> "for" "(" ( varDecl | exprStmt | ";" ) expression? ";" expression? ")" statement ;
@@ -25,7 +28,9 @@ import static com.scaventz.lox.TokenType.*;
  * comparison     -> term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
  * term           -> factor ( ( "-" | "+" ) factor )* ;
  * factor         -> unary ( ( "/" | "*" ) unary )* ;
- * unary          -> ( "!" | "-" ) unary | primary ;
+ * unary          -> ( "!" | "-" ) unary | call ;
+ * call           -> primary ( "(" arguments? ")" )* ;
+ * arguments      -> expression ( "," expression )* ;
  * primary        -> "true" | "false" | "nil" | NUMBER | STRING | "(" expression ")" | IDENTIFIER ;
  */
 public class Parser {
@@ -66,6 +71,7 @@ public class Parser {
     }
 
     private Stmt statement() {
+        if (match(FUN)) return function("function");
         if (match(FOR)) return forStatement();
         if (match(IF)) return ifStatement();
         if (match(PRINT)) return printStatement();
@@ -174,6 +180,28 @@ public class Parser {
         return statements;
     }
 
+    private Stmt.Function function(String kind) {
+        Token name = consume(IDENTIFIER, "Expect " + kind + " name.");
+
+        consume(LEFT_PAREN, "Expect '(' after " + kind + " name.");
+        List<Token> parameters = new ArrayList<>();
+        if (!check(RIGHT_PAREN)) {
+            do {
+                if (parameters.size() >= 255) {
+                    error(peek(), "Can't have more than 255 parameters.");
+                }
+
+                parameters.add(
+                        consume(IDENTIFIER, "Expect parameter name."));
+            } while (match(COMMA));
+        }
+        consume(RIGHT_PAREN, "Expect ')' after parameters.");
+
+        consume(LEFT_BRACE, "Expect '{' before " + kind + " body.");
+        List<Stmt> body = block();
+        return new Stmt.Function(name, parameters, body);
+    }
+
     /**
      * assignment -> IDENTIFIER "=" assignment | equality ;
      */
@@ -261,6 +289,9 @@ public class Parser {
         return expr;
     }
 
+    /**
+     * unary          -> ( "!" | "-" ) unary | call ;
+     */
     private Expr unary() {
         if (match(TokenType.BANG, TokenType.MINUS)) {
             Token operator = previous();
@@ -268,7 +299,41 @@ public class Parser {
             return new Expr.Unary(operator, right);
         }
 
-        return primary();
+        return call();
+    }
+
+    /**
+     * call           -> primary ( "(" arguments? ")" )* ;
+     */
+    private Expr call() {
+        Expr expr = primary();
+
+        while (true) {
+            if (match(LEFT_PAREN)) {
+                expr = finishCall(expr);
+            } else {
+                break;
+            }
+        }
+
+        return expr;
+    }
+
+    private Expr finishCall(Expr callee) {
+        List<Expr> arguments = new ArrayList<>();
+        if (!check(RIGHT_PAREN)) {
+            do {
+                if (arguments.size() >= 255) {
+                    error(peek(), "Can't have more than 255 arguments.");
+                }
+                arguments.add(expression());
+            } while (match(COMMA));
+        }
+
+        Token paren = consume(RIGHT_PAREN,
+                "Expect ')' after arguments.");
+
+        return new Expr.Call(callee, paren, arguments);
     }
 
     private Expr term() {
