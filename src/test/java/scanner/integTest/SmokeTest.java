@@ -184,4 +184,36 @@ public class SmokeTest {
         assert !Lox.hadError;
         assert !Lox.hadRuntimeError;
     }
+
+    @Test
+    public void functionNesting() {
+        String source = """
+                fun makeCounter() {
+                  var i = 0;
+                  fun count() {
+                    i = i + 1;
+                    print i;
+                  }
+                
+                  return count;
+                }
+                
+                var counter = makeCounter();
+                counter(); // "1".
+                counter(); // "2".
+                """;
+
+        List<Token> tokens = new Scanner(source).scanTokens();
+        new Interpreter().interpret(new Parser(tokens).parse());
+
+        String expected = """
+                1
+                2
+                """;
+        assertEquals("", errContent.toString(StandardCharsets.UTF_8).replace("\r", ""));
+        assertEquals(expected, outContent.toString(StandardCharsets.UTF_8).replace("\r", ""));
+
+        assert !Lox.hadError;
+        assert !Lox.hadRuntimeError;
+    }
 }
