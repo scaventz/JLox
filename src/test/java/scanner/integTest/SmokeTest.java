@@ -120,7 +120,7 @@ public class SmokeTest {
     public void functionToStringTest() {
         String source = """
                 fun add(a, b) {
-                  print a + b;
+                    print a + b;
                 }
                                 
                 print add; // "<fn add>".
@@ -137,7 +137,51 @@ public class SmokeTest {
 
         assert !Lox.hadError;
         assert !Lox.hadRuntimeError;
+    }
 
+    @Test
+    public void functionInvocation() {
+        String source = """
+                fun sayHi(first, last) {
+                  print "Hi, " + first + " " + last + "!";
+                }
+                
+                sayHi("Dear", "Reader");
+                """;
 
+        List<Token> tokens = new Scanner(source).scanTokens();
+        new Interpreter().interpret(new Parser(tokens).parse());
+
+        String expected = """
+                Hi, Dear Reader!
+                """;
+        assertEquals("", errContent.toString(StandardCharsets.UTF_8).replace("\r", ""));
+        assertEquals(expected, outContent.toString(StandardCharsets.UTF_8).replace("\r", ""));
+
+        assert !Lox.hadError;
+        assert !Lox.hadRuntimeError;
+    }
+
+    @Test
+    public void functionReturn() {
+        String source = """
+                fun add(a, b) {
+                    return a + b;
+                }
+                                
+                print add(1,2); // "<fn add>".
+                """;
+
+        List<Token> tokens = new Scanner(source).scanTokens();
+        new Interpreter().interpret(new Parser(tokens).parse());
+
+        String expected = """
+                3
+                """;
+        assertEquals("", errContent.toString(StandardCharsets.UTF_8).replace("\r", ""));
+        assertEquals(expected, outContent.toString(StandardCharsets.UTF_8).replace("\r", ""));
+
+        assert !Lox.hadError;
+        assert !Lox.hadRuntimeError;
     }
 }

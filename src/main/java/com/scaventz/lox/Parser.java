@@ -13,12 +13,13 @@ import static com.scaventz.lox.TokenType.*;
  * function       -> IDENTIFIER "(" parameters? ")" block ;
  * parameters     -> IDENTIFIER ( "," IDENTIFIER )* ;
  * varDecl        -> "var" IDENTIFIER ( "=" expression )? ";" ;
- * statement      -> exprStmt | forStmt | ifStmt | printStmt | whileStmt | block ;
+ * statement      -> exprStmt | forStmt | ifStmt | printStmt | returnStmt | whileStmt | block ;
  * forStmt        -> "for" "(" ( varDecl | exprStmt | ";" ) expression? ";" expression? ")" statement ;
- * whileStmt      -> "while" "(" expression ")" statement ;
  * ifStmt         -> "if" "(" expression ")" statement ( "else" statement )? ;
  * exprStmt       -> expression ";" ;
  * printStmt      -> "print" expression ";" ;
+ * returnStmt     -> "return" expression? ";" ;
+ * whileStmt      -> "while" "(" expression ")" statement ;
  * block          -> "{" declaration* "}" ;
  * expression     -> assignment  ;
  * assignment     -> IDENTIFIER "=" assignment | logic_or ;
@@ -76,6 +77,7 @@ public class Parser {
         if (match(FOR)) return forStatement();
         if (match(IF)) return ifStatement();
         if (match(PRINT)) return printStatement();
+        if (match(RETURN)) return returnStatement();
         if (match(WHILE)) return whileStatement();
         if (match(LEFT_BRACE)) return new Stmt.Block(block());
         return expressionStatement();
@@ -141,6 +143,17 @@ public class Parser {
         Expr value = expression();
         consume(SEMICOLON, "Expect ';' after value.");
         return new Stmt.Print(value);
+    }
+
+    private Stmt returnStatement() {
+        Token keyword = previous();
+        Expr value = null;
+        if (!check(SEMICOLON)) {
+            value = expression();
+        }
+
+        consume(SEMICOLON, "Expect ';' after return value.");
+        return new Stmt.Return(keyword, value);
     }
 
     private Stmt varDeclaration() {
