@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
@@ -30,6 +29,11 @@ public class SmokeTest {
     public void restoreStreams() {
         System.setOut(originalOut);
         System.setErr(originalErr);
+    }
+
+    @AfterEach
+    public void stateReset() {
+        Lox.stateReset();
     }
 
     @Test
@@ -145,7 +149,7 @@ public class SmokeTest {
                 fun sayHi(first, last) {
                   print "Hi, " + first + " " + last + "!";
                 }
-                
+                                
                 sayHi("Dear", "Reader");
                 """;
 
@@ -194,10 +198,10 @@ public class SmokeTest {
                     i = i + 1;
                     print i;
                   }
-                
+                                
                   return count;
                 }
-                
+                                
                 var counter = makeCounter();
                 counter(); // "1".
                 counter(); // "2".
@@ -225,7 +229,7 @@ public class SmokeTest {
                   fun showA() {
                     print a;
                   }
-                
+                                
                   showA();
                   var a = "block";
                   showA();

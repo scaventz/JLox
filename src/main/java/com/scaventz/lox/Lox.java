@@ -104,4 +104,9 @@ public class Lox {
             this.level = level;
         }
     }
+
+    public static void stateReset() {
+        hadError = false;
+        hadRuntimeError = false;
+    }
 }

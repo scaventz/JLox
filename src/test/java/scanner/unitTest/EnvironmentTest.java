@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -31,26 +31,28 @@ public class EnvironmentTest {
     }
 
     @Test
-    public void smoke() throws UnsupportedEncodingException {
+    public void smoke() {
         String source = "var a = 1;var b = 2;print a + b;";
 
         List<Token> tokens = new Scanner(source).scanTokens();
         new Interpreter().interpret(new Parser(tokens).parse());
 
+        assertEquals("",errContent.toString(StandardCharsets.UTF_8));
         assert !Lox.hadError;
         assert !Lox.hadRuntimeError;
-        assertEquals("3\r\n", outContent.toString("UTF8"));
+        assertEquals("3\r\n", outContent.toString(StandardCharsets.UTF_8));
     }
 
     @Test
-    public void assignment() throws UnsupportedEncodingException {
+    public void assignment() {
         String source = "var a = 1;a = 2;print a;";
 
         List<Token> tokens = new Scanner(source).scanTokens();
         new Interpreter().interpret(new Parser(tokens).parse());
 
+        assertEquals("",errContent.toString(StandardCharsets.UTF_8));
         assert !Lox.hadError;
         assert !Lox.hadRuntimeError;
-        assertEquals("2\r\n", outContent.toString("UTF8"));
+        assertEquals("2\r\n", outContent.toString(StandardCharsets.UTF_8));
     }
 }

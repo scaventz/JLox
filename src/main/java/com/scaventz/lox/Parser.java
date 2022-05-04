@@ -183,6 +183,9 @@ public class Parser {
         return new Stmt.Expression(expr);
     }
 
+    /**
+     * block -> "{" declaration* "}" ;
+     */
     private List<Stmt> block() {
         List<Stmt> statements = new ArrayList<>();
 
