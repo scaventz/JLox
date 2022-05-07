@@ -34,7 +34,9 @@ import static com.scaventz.lox.TokenType.*;
  * arguments      -> expression ( "," expression )* ;
  * primary        -> "true" | "false" | "nil" | NUMBER | STRING | "(" expression ")" | IDENTIFIER ;
  *
- * Note: Terminals are quoted strings, and non-terminals are lowercase words.
+ * Note:
+ * 1. Terminals are quoted strings, and non-terminals are lowercase words
+ * 2. CAPITALIZED terminals that are a single lexeme whose text representation may vary
  */
 public class Parser {
     private final List<Token> tokens;
