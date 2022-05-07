@@ -56,6 +56,19 @@ public class InterpreterTest {
         runAndAssert(src, "6\r\n");
     }
 
+    @Test
+    public void testFunctionCall() throws UnsupportedEncodingException {
+        String src = """
+                fun greetTo(name) {
+                    return "greetings, Mr "+name;
+                }
+                var message = greetTo("Anderson");
+                print message;
+                """;
+        runAndAssert(src, "greetings, Mr Anderson\r\n");
+    }
+
+
     // TODO re-write and simplify relevant tests
     // TODO Note Stmt is not a public type, which requires re-write this test
     private void runAndAssert(String source, String expected) throws UnsupportedEncodingException {
