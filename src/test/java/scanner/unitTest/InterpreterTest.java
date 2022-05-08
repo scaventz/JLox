@@ -43,7 +43,17 @@ public class InterpreterTest {
 
     @Test
     public void printArithmeticResult() throws UnsupportedEncodingException {
-        runAndAssert("print 2 + 1;", "3\r\n");
+        runAndAssert("print 2 + 1;", "3.0\r\n");
+    }
+
+    @Test
+    public void testAssignment() throws UnsupportedEncodingException {
+        String src = """
+                var a = 5;
+                a=6;
+                print a;
+                """;
+        runAndAssert(src, "6\r\n");
     }
 
     // TODO re-write and simplify relevant tests
@@ -52,6 +62,7 @@ public class InterpreterTest {
         List<Token> tokens = new Scanner(source).scanTokens();
         new Interpreter().interpret(new Parser(tokens).parse());
 
+        assertEquals("", errContent.toString("UTF8"));
         assert !Lox.hadError;
         assert !Lox.hadRuntimeError;
         assertEquals(expected, outContent.toString("UTF8"));
