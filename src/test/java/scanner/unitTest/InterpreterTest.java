@@ -84,6 +84,27 @@ public class InterpreterTest {
         runAndAssert(src, expect);
     }
 
+    @Test
+    public void testLocalFunction() throws UnsupportedEncodingException {
+        String src = """
+                fun makeCounter() {
+                  var i = 0;
+                  fun count() {
+                    i = i + 1;
+                    print i;
+                  }
+                            
+                  return count;
+                }
+                            
+                var counter = makeCounter();
+                counter();
+                counter();
+                    """;
+        String expect = "12";
+        runAndAssert(src, expect);
+    }
+
 
     // TODO re-write and simplify relevant tests
     // TODO Note Stmt is not a public type, which requires re-write this test
