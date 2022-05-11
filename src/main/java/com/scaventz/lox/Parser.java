@@ -70,8 +70,9 @@ public class Parser {
             if (match(VAR)) return varDeclaration();
             return statement();
         } catch (ParseError error) {
-            synchronize();
+            Lox.error(error.token,error.message);
             Lox.hadError = true;
+            synchronize();
             return null;
         }
     }
