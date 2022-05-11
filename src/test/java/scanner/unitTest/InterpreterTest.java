@@ -33,17 +33,17 @@ public class InterpreterTest {
 
     @Test
     public void printString() throws UnsupportedEncodingException {
-        runAndAssert("print \"one\";", "one\r\n");
+        runAndAssert("print \"one\";", "one");
     }
 
     @Test
     public void printBoolean() throws UnsupportedEncodingException {
-        runAndAssert("print true;", "true\r\n");
+        runAndAssert("print true;", "true");
     }
 
     @Test
     public void printArithmeticResult() throws UnsupportedEncodingException {
-        runAndAssert("print 2 + 1;", "3.0\r\n");
+        runAndAssert("print 2 + 1;", "3");
     }
 
     @Test
@@ -53,7 +53,7 @@ public class InterpreterTest {
                 a=6;
                 print a;
                 """;
-        runAndAssert(src, "6\r\n");
+        runAndAssert(src, "6");
     }
 
     @Test
@@ -65,7 +65,23 @@ public class InterpreterTest {
                 var message = greetTo("Anderson");
                 print message;
                 """;
-        runAndAssert(src, "greetings, Mr Anderson\r\n");
+        runAndAssert(src, "greetings, Mr Anderson");
+    }
+
+    @Test
+    public void testReturn() throws UnsupportedEncodingException {
+        String src = """
+                    fun fib(n) {
+                      if (n <= 1) return n;
+                      return fib(n - 2) + fib(n - 1);
+                    }
+                    
+                    for (var i = 0; i < 20; i = i + 1) {
+                      print fib(i);
+                    }
+                """;
+        String expect = "01123581321345589144233377610987159725844181";
+        runAndAssert(src, expect);
     }
 
 
@@ -78,6 +94,7 @@ public class InterpreterTest {
         assertEquals("", errContent.toString("UTF8"));
         assert !Lox.hadError;
         assert !Lox.hadRuntimeError;
-        assertEquals(expected, outContent.toString("UTF8"));
+        String actual = outContent.toString().replace("\r", "");
+        assertEquals(expected, actual);
     }
 }

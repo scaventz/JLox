@@ -54,25 +54,7 @@ public class SmokeTest {
 
         assert !Lox.hadError;
         assert !Lox.hadRuntimeError;
-        String expected = """
-                0
-                1
-                1
-                2
-                3
-                5
-                8
-                13
-                21
-                34
-                55
-                89
-                144
-                233
-                377
-                610
-                987
-                """;
+        String expected = "01123581321345589144233377610987";
         assertEquals(expected, outContent.toString(StandardCharsets.UTF_8).replace("\r", ""));
     }
 
@@ -106,17 +88,7 @@ public class SmokeTest {
         assert !Lox.hadError;
         assert !Lox.hadRuntimeError;
 
-        String expected = """
-                inner a
-                outer b
-                global c
-                outer a
-                outer b
-                global c
-                global a
-                global b
-                global c
-                """;
+        String expected = "inner aouter bglobal couter aouter bglobal cglobal aglobal bglobal c";
         assertEquals(expected, outContent.toString(StandardCharsets.UTF_8).replace("\r", ""));
     }
 
@@ -133,9 +105,8 @@ public class SmokeTest {
         List<Token> tokens = new Scanner(source).scanTokens();
         new Interpreter().interpret(new Parser(tokens).parse());
 
-        String expected = """
-                <fn add>
-                """;
+        String expected = "<fn add>";
+
         assertEquals("", errContent.toString(StandardCharsets.UTF_8).replace("\r", ""));
         assertEquals(expected, outContent.toString(StandardCharsets.UTF_8).replace("\r", ""));
 
@@ -156,9 +127,7 @@ public class SmokeTest {
         List<Token> tokens = new Scanner(source).scanTokens();
         new Interpreter().interpret(new Parser(tokens).parse());
 
-        String expected = """
-                Hi, Dear Reader!
-                """;
+        String expected = "Hi, Dear Reader!";
         assertEquals("", errContent.toString(StandardCharsets.UTF_8).replace("\r", ""));
         assertEquals(expected, outContent.toString(StandardCharsets.UTF_8).replace("\r", ""));
 
@@ -179,9 +148,7 @@ public class SmokeTest {
         List<Token> tokens = new Scanner(source).scanTokens();
         new Interpreter().interpret(new Parser(tokens).parse());
 
-        String expected = """
-                3
-                """;
+        String expected = "3";
         assertEquals("", errContent.toString(StandardCharsets.UTF_8).replace("\r", ""));
         assertEquals(expected, outContent.toString(StandardCharsets.UTF_8).replace("\r", ""));
 
@@ -210,10 +177,7 @@ public class SmokeTest {
         List<Token> tokens = new Scanner(source).scanTokens();
         new Interpreter().interpret(new Parser(tokens).parse());
 
-        String expected = """
-                1
-                2
-                """;
+        String expected = "12";
         assertEquals("", errContent.toString(StandardCharsets.UTF_8).replace("\r", ""));
         assertEquals(expected, outContent.toString(StandardCharsets.UTF_8).replace("\r", ""));
 
@@ -239,10 +203,7 @@ public class SmokeTest {
         List<Token> tokens = new Scanner(source).scanTokens();
         new Interpreter().interpret(new Parser(tokens).parse());
 
-        String expected = """
-                global
-                block
-                """;
+        String expected = "globalblock";
         assertEquals("", errContent.toString(StandardCharsets.UTF_8).replace("\r", ""));
         assertEquals(expected, outContent.toString(StandardCharsets.UTF_8).replace("\r", ""));
 

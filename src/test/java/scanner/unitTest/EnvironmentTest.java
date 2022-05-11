@@ -40,7 +40,7 @@ public class EnvironmentTest {
         assertEquals("",errContent.toString(StandardCharsets.UTF_8));
         assert !Lox.hadError;
         assert !Lox.hadRuntimeError;
-        assertEquals("3\r\n", outContent.toString(StandardCharsets.UTF_8));
+        assertEquals("3", outContent.toString(StandardCharsets.UTF_8));
     }
 
     @Test
@@ -53,6 +53,6 @@ public class EnvironmentTest {
         assertEquals("",errContent.toString(StandardCharsets.UTF_8));
         assert !Lox.hadError;
         assert !Lox.hadRuntimeError;
-        assertEquals("2\r\n", outContent.toString(StandardCharsets.UTF_8));
+        assertEquals("2", outContent.toString(StandardCharsets.UTF_8));
     }
 }
