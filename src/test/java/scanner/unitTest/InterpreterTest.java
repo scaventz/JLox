@@ -105,6 +105,24 @@ public class InterpreterTest {
         runAndAssert(src, expect);
     }
 
+    @Test
+    public void testClosure() throws UnsupportedEncodingException {
+        String src = """
+                var a = "global";
+                {
+                  fun showA() {
+                    print a;
+                  }
+
+                  showA();
+                  var a = "block";
+                  showA();
+                }
+                                    """;
+        String expect = "globalblock";
+        runAndAssert(src, expect);
+    }
+
 
     // TODO re-write and simplify relevant tests
     // TODO Note Stmt is not a public type, which requires re-write this test
