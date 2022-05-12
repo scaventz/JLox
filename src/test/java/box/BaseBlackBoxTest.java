@@ -34,22 +34,22 @@ public class BaseBlackBoxTest {
     // TODO Note Stmt is not a public type, which requires re-write this test
     void runAndAssert(String source, String expected) {
         Lox.hadError = false;
+        Lox.hadRuntimeError = false;
+
         List<Token> tokens = new Scanner(source).scanTokens();
         List<Stmt> statements = new Parser(tokens).parse();
 
         Interpreter interpreter = new Interpreter();
         new Resolver(interpreter).resolve(statements);
 
-        if (Lox.hadError) {
+        if (Lox.hadError || Lox.hadRuntimeError) {
             assertEquals(expected, errContent.toString(StandardCharsets.UTF_8).replace("\r", ""));
         } else {
             interpreter.interpret(statements);
 
-            if (Lox.hadError) {
+            if (Lox.hadError || Lox.hadRuntimeError) {
                 assertEquals(expected, errContent.toString(StandardCharsets.UTF_8).replace("\r", ""));
-            }
-            else {
-                assert !Lox.hadRuntimeError;
+            } else {
                 String actual = outContent.toString().replace("\r", "");
                 assertEquals(expected, actual);
             }

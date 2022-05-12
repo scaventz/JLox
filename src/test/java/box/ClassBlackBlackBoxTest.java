@@ -26,4 +26,17 @@ public class ClassBlackBlackBoxTest extends BaseBlackBoxTest {
                 """;
         runAndAssert(src, "Bagel instance");
     }
+
+    @Test
+    public void testMethods() {
+        String src = """
+                class Bacon {
+                    eat() {
+                        print "Crunch crunch crunch!";
+                    }
+                }
+                Bacon().eat();
+                """;
+        runAndAssert(src, "Crunch crunch crunch!");
+    }
 }
