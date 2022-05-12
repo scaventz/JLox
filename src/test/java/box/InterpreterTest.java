@@ -243,6 +243,16 @@ public class InterpreterTest {
         runAndAssert(src, expect);
     }
 
+    @Test
+    public void testDanglingReturn() {
+        String src = """
+                return "at top level";
+                """;
+
+        String expect = "[line 1, column 7] error at 'return': Can't return from top-level code.\n";
+        runAndAssert(src, expect);
+    }
+
     // TODO re-write and simplify relevant tests
     // TODO Note Stmt is not a public type, which requires re-write this test
     private void runAndAssert(String source, String expected) {
@@ -252,15 +262,20 @@ public class InterpreterTest {
 
         Interpreter interpreter = new Interpreter();
         new Resolver(interpreter).resolve(statements);
-        interpreter.interpret(statements);
 
         if (Lox.hadError) {
             assertEquals(expected, errContent.toString(StandardCharsets.UTF_8).replace("\r", ""));
-        }
-        else {
-            assert !Lox.hadRuntimeError;
-            String actual = outContent.toString().replace("\r", "");
-            assertEquals(expected, actual);
+        } else {
+            interpreter.interpret(statements);
+
+            if (Lox.hadError) {
+                assertEquals(expected, errContent.toString(StandardCharsets.UTF_8).replace("\r", ""));
+            }
+            else {
+                assert !Lox.hadRuntimeError;
+                String actual = outContent.toString().replace("\r", "");
+                assertEquals(expected, actual);
+            }
         }
     }
 }
