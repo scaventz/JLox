@@ -16,4 +16,14 @@ public class ClassBlackBlackBoxTest extends BaseBlackBoxTest {
                 """;
         runAndAssert(src, "DevonshireCream");
     }
+
+    @Test
+    public void testInstance() {
+        String src = """
+                class Bagel {}
+                var bagel = Bagel();
+                print bagel; // Prints "Bagel instance".
+                """;
+        runAndAssert(src, "Bagel instance");
+    }
 }
