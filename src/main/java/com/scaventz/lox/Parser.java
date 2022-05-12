@@ -8,7 +8,8 @@ import static com.scaventz.lox.TokenType.*;
 
 /**
  * program        -> declaration* EOF ;
- * declaration    -> funDecl | varDecl | statement ;
+ * declaration    -> classDecl | funDecl | varDecl | statement ;
+ * classDecl      -> "class" IDENTIFIER "{" function* "}" ;
  * funDecl        -> "fun" function ;
  * function       -> IDENTIFIER "(" parameters? ")" block ;
  * parameters     -> IDENTIFIER ( "," IDENTIFIER )* ;
@@ -33,7 +34,7 @@ import static com.scaventz.lox.TokenType.*;
  * call           -> primary ( "(" arguments? ")" )* ;
  * arguments      -> expression ( "," expression )* ;
  * primary        -> "true" | "false" | "nil" | NUMBER | STRING | "(" expression ")" | IDENTIFIER ;
- *
+ * <p>
  * Note:
  * 1. Terminals are quoted strings, and non-terminals are lowercase words
  * 2. CAPITALIZED terminals that are a single lexeme whose text representation may vary
@@ -66,15 +67,29 @@ public class Parser {
 
     private Stmt declaration() {
         try {
+            if (match(CLASS)) return classDeclaration();
             if (match(FUN)) return function("function");
             if (match(VAR)) return varDeclaration();
             return statement();
         } catch (ParseError error) {
-            Lox.error(error.token,error.message);
+            Lox.error(error.token, error.message);
             Lox.hadError = true;
             synchronize();
             return null;
         }
+    }
+
+    private Stmt classDeclaration() {
+        Token name = consume(IDENTIFIER, "Expect class name.");
+        consume(LEFT_BRACE, "Expect '{' before class body.");
+
+        List<Stmt.Function> methods = new ArrayList<>();
+        while (!check(RIGHT_BRACE) && !isAtEnd()) {
+            methods.add(function("method"));
+        }
+
+        consume(RIGHT_BRACE, "Expect '}' after class body.");
+        return new Stmt.Class(name, methods);
     }
 
     private Stmt statement() {
