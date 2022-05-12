@@ -68,6 +68,8 @@ public class Lox {
         List<Stmt> statements = parser.parse();
         // stop if there was a syntax error
         if (hadError) return;
+
+        new Resolver(interpreter).resolve(statements);
         interpreter.interpret(statements);
     }
 

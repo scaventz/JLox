@@ -118,8 +118,8 @@ public class InterpreterTest {
                   var a = "block";
                   showA();
                 }
-                                    """;
-        String expect = "globalblock";
+                """;
+        String expect = "globalglobal";
         runAndAssert(src, expect);
     }
 
@@ -128,7 +128,11 @@ public class InterpreterTest {
     // TODO Note Stmt is not a public type, which requires re-write this test
     private void runAndAssert(String source, String expected) throws UnsupportedEncodingException {
         List<Token> tokens = new Scanner(source).scanTokens();
-        new Interpreter().interpret(new Parser(tokens).parse());
+        List<Stmt> statements = new Parser(tokens).parse();
+
+        Interpreter interpreter = new Interpreter();
+        new Resolver(interpreter).resolve(statements);
+        interpreter.interpret(statements);
 
         assertEquals("", errContent.toString("UTF8"));
         assert !Lox.hadError;
