@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,22 +32,22 @@ public class InterpreterTest {
 
 
     @Test
-    public void printString() throws UnsupportedEncodingException {
+    public void printString() {
         runAndAssert("print \"one\";", "one");
     }
 
     @Test
-    public void printBoolean() throws UnsupportedEncodingException {
+    public void printBoolean() {
         runAndAssert("print true;", "true");
     }
 
     @Test
-    public void printArithmeticResult() throws UnsupportedEncodingException {
+    public void printArithmeticResult() {
         runAndAssert("print 2 + 1;", "3");
     }
 
     @Test
-    public void testAssignment() throws UnsupportedEncodingException {
+    public void testAssignment() {
         String src = """
                 var a = 5;
                 a=6;
@@ -57,7 +57,7 @@ public class InterpreterTest {
     }
 
     @Test
-    public void testFunctionCall() throws UnsupportedEncodingException {
+    public void testFunctionCall() {
         String src = """
                 fun greetTo(name) {
                     return "greetings, Mr "+name;
@@ -69,7 +69,7 @@ public class InterpreterTest {
     }
 
     @Test
-    public void testReturn() throws UnsupportedEncodingException {
+    public void testReturn() {
         String src = """
                     fun fib(n) {
                       if (n <= 1) return n;
@@ -85,7 +85,7 @@ public class InterpreterTest {
     }
 
     @Test
-    public void testLocalFunction() throws UnsupportedEncodingException {
+    public void testLocalFunction() {
         String src = """
                 fun makeCounter() {
                   var i = 0;
@@ -106,7 +106,7 @@ public class InterpreterTest {
     }
 
     @Test
-    public void testClosure() throws UnsupportedEncodingException {
+    public void testClosure() {
         String src = """
                 var a = "global";
                 {
@@ -124,7 +124,7 @@ public class InterpreterTest {
     }
 
     @Test
-    public void testDuplicateDeclaration() throws UnsupportedEncodingException {
+    public void testDuplicateDeclaration() {
         String src = """
                 fun bad() {
                   var a = "first";
@@ -136,7 +136,7 @@ public class InterpreterTest {
     }
 
     @Test
-    public void forLoop() throws UnsupportedEncodingException {
+    public void forLoop() {
         String src = """
                 var a = 0;
                 var temp;
@@ -153,7 +153,7 @@ public class InterpreterTest {
     }
 
     @Test
-    public void scopeTest() throws UnsupportedEncodingException {
+    public void scopeTest() {
         String src = """
                 var a = "global a";
                 var b = "global b";
@@ -180,7 +180,7 @@ public class InterpreterTest {
     }
 
     @Test
-    public void functionToStringTest() throws UnsupportedEncodingException {
+    public void functionToStringTest() {
         String src = """
                 fun add(a, b) {
                     print a + b;
@@ -194,7 +194,7 @@ public class InterpreterTest {
     }
 
     @Test
-    public void functionInvocation() throws UnsupportedEncodingException {
+    public void functionInvocation() {
         String src = """
                 fun sayHi(first, last) {
                   print "Hi, " + first + " " + last + "!";
@@ -208,7 +208,7 @@ public class InterpreterTest {
     }
 
     @Test
-    public void functionReturn() throws UnsupportedEncodingException {
+    public void functionReturn() {
         String src = """
                 fun add(a, b) {
                     return a + b;
@@ -222,7 +222,7 @@ public class InterpreterTest {
     }
 
     @Test
-    public void functionNesting() throws UnsupportedEncodingException {
+    public void functionNesting() {
         String src = """
                 fun makeCounter() {
                   var i = 0;
@@ -245,7 +245,7 @@ public class InterpreterTest {
 
     // TODO re-write and simplify relevant tests
     // TODO Note Stmt is not a public type, which requires re-write this test
-    private void runAndAssert(String source, String expected) throws UnsupportedEncodingException {
+    private void runAndAssert(String source, String expected) {
         Lox.hadError = false;
         List<Token> tokens = new Scanner(source).scanTokens();
         List<Stmt> statements = new Parser(tokens).parse();
@@ -255,7 +255,7 @@ public class InterpreterTest {
         interpreter.interpret(statements);
 
         if (Lox.hadError) {
-            assertEquals(expected, errContent.toString("UTF8").replace("\r", ""));
+            assertEquals(expected, errContent.toString(StandardCharsets.UTF_8).replace("\r", ""));
         }
         else {
             assert !Lox.hadRuntimeError;
