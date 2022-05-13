@@ -1,4 +1,4 @@
-package box;
+package backend;
 
 import org.junit.jupiter.api.Test;
 

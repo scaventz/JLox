@@ -1,4 +1,4 @@
-package box;
+package backend;
 
 import com.scaventz.lox.*;
 import org.junit.jupiter.api.AfterEach;
