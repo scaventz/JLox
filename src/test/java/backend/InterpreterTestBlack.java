@@ -195,28 +195,6 @@ public class InterpreterTestBlack extends BaseBlackBoxTest {
     }
 
     @Test
-    public void functionNesting() {
-        String src = """
-                fun makeCounter() {
-                  var i = 0;
-                  fun count() {
-                    i = i + 1;
-                    print i;
-                  }
-                                
-                  return count;
-                }
-                                
-                var counter = makeCounter();
-                counter(); // "1".
-                counter(); // "2".
-                """;
-
-        String expect = "12";
-        runAndAssert(src, expect);
-    }
-
-    @Test
     public void testDanglingReturn() {
         String src = """
                 return "at top level";
