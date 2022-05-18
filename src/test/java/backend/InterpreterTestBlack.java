@@ -203,4 +203,19 @@ public class InterpreterTestBlack extends BaseBlackBoxTest {
         String expect = "[line 1, column 7] error at 'return': Can't return from top-level code.\n";
         runAndAssert(src, expect);
     }
+
+    @Test
+    public void testScope() {
+        String src = """
+                  var a = 5;
+                  {
+                  var a = a;
+                  print(a);
+                  }
+                  
+                """;
+
+        String expect = "[line 1, column 7] error at 'return': Can't return from top-level code.\n";
+        runAndAssert(src, expect);
+    }
 }
