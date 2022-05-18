@@ -39,4 +39,16 @@ public class ClassBlackBlackBoxTest extends BaseBlackBoxTest {
                 """;
         runAndAssert(src, "Crunch crunch crunch!");
     }
+
+    @Test
+    public void testPropertyAccess() {
+        String src = """
+                class Bacon {
+                }
+                var bacon = Bacon();
+                bacon.message = "good";
+                print bacon.message;
+                """;
+        runAndAssert(src, "good");
+    }
 }
