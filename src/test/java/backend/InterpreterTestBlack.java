@@ -215,7 +215,7 @@ public class InterpreterTestBlack extends BaseBlackBoxTest {
                   
                 """;
 
-        String expect = "[line 1, column 7] error at 'return': Can't return from top-level code.\n";
+        String expect = "[line 3, column 29] error at 'a': Can't read local variable in its own initializer.\n";
         runAndAssert(src, expect);
     }
 }
