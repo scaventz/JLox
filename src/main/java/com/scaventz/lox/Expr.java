@@ -4,7 +4,7 @@ import java.util.List;
 
 // There is no technical need for putting all expression subclasses under Expr,
 // but it lets us cram all the classes into a single Java file.
-abstract class Expr{
+public abstract class Expr{
     interface Visitor<R> {
         R visitAssignExpr(Assign expr);
         R visitBinaryExpr(Binary expr);
@@ -14,6 +14,7 @@ abstract class Expr{
         R visitLiteralExpr(Literal expr);
         R visitLogicalExpr(Logical expr);
         R visitSetExpr(Set expr);
+        R visitThisExpr(This expr);
         R visitUnaryExpr(Unary expr);
         R visitVariableExpr(Variable expr);
     }
@@ -140,6 +141,19 @@ abstract class Expr{
         final Expr object;
         final Token name;
         final Expr value;
+    }
+
+    static class This extends Expr{
+        This(Token keyword) {
+            this.keyword = keyword;
+        }
+
+        @Override
+        <R> R accept(Visitor<R> visitor) {
+            return visitor.visitThisExpr(this);
+        }
+
+        final Token keyword;
     }
 
     static class Unary extends Expr{

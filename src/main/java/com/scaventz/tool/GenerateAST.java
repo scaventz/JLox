@@ -20,6 +20,7 @@ public class GenerateAST {
                 "Literal  : Object value",
                 "Logical  : Expr left, Token operator, Expr right",
                 "Set      : Expr object, Token name, Expr value",
+                "This     : Token keyword",
                 "Unary    : Token operator, Expr right",
                 "Variable : Token name"
         ), List.of("import java.util.List;"));
@@ -48,7 +49,7 @@ public class GenerateAST {
         writer.println();
         writer.println("// There is no technical need for putting all expression subclasses under Expr,");
         writer.println("// but it lets us cram all the classes into a single Java file.");
-        writer.println("abstract class " + baseName + "{");
+        writer.println("public abstract class " + baseName + "{");
 
         defineVisitor(writer, baseName, types);
 

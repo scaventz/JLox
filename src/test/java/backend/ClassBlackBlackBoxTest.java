@@ -51,4 +51,107 @@ public class ClassBlackBlackBoxTest extends BaseBlackBoxTest {
                 """;
         runAndAssert(src, "good");
     }
+
+    @Test
+    public void testFunctionProperty() {
+        String src = """
+                class Egotist {
+                  speak() {
+                    print this;
+                  }
+                }
+
+                var method = Egotist().speak;
+                method();
+                """;
+        runAndAssert(src, "Egotist instance");
+    }
+
+    @Test
+    public void testFirstClassFunction() {
+        String src = """
+                class Person {
+                  sayName() {
+                    print this.name;
+                  }
+                }
+                            
+                var jane = Person();
+                jane.name = "Jane";
+                            
+                var method = jane.sayName;
+                method();
+                    """;
+        runAndAssert(src, "Jane");
+    }
+
+    @Test
+    public void testThis() {
+        String src = """
+                class Cake {
+                  taste() {
+                    var adjective = "delicious";
+                    print "The " + this.flavor + " cake is " + adjective + "!";
+                  }
+                }
+
+                var cake = Cake();
+                cake.flavor = "German chocolate";
+                cake.taste(); // Prints "The German chocolate cake is delicious!".
+                """;
+        runAndAssert(src, "The German chocolate cake is delicious!");
+    }
+
+    @Test
+    public void testThis2() {
+        String src = """
+                class Thing {
+                  getCallback() {
+                    fun localFunction() {
+                      print this;
+                    }
+
+                    return localFunction;
+                  }
+                }
+
+                var callback = Thing().getCallback();
+                callback();
+                """;
+        runAndAssert(src, "Thing instance");
+    }
+
+    @Test
+    public void testDanglingThis() {
+        String src = """
+                print this;
+                """;
+        runAndAssert(src, "[line 1, column 11] error at 'this': Can't use 'this' outside of a class.\n");
+    }
+
+    @Test
+    public void testDanglingThis2() {
+        String src = """
+                fun notAMethod() {
+                  print this;
+                }
+                notAMethod();
+                """;
+        runAndAssert(src, "[line 2, column 32] error at 'this': Can't use 'this' outside of a class.\n");
+    }
+
+    @Test
+    public void testInit() {
+        String src = """
+                class Foo {
+                  init() {
+                    print this;
+                  }
+                }
+
+                var foo = Foo();
+                print foo.init();
+                """;
+        runAndAssert(src, "[line 2, column 32] error at 'this': Can't use 'this' outside of a class.\n");
+    }
 }
