@@ -207,15 +207,14 @@ public class InterpreterTestBlack extends BaseBlackBoxTest {
     @Test
     public void testScope() {
         String src = """
-                  var a = 5;
-                  {
-                  var a = a;
-                  print(a);
-                  }
-                  
+                var a = 5;
+                {
+                    var a = a;
+                    print(a);
+                }
                 """;
 
-        String expect = "[line 3, column 29] error at 'a': Can't read local variable in its own initializer.\n";
+        String expect = "[line 3, column 27] error at 'a': Can't read local variable in its own initializer.\n";
         runAndAssert(src, expect);
     }
 }

@@ -16,6 +16,7 @@ public class GenerateAST {
                 // We’ll use that token’s location when we report a runtime error caused by a function call.
                 "Call     : Expr callee, Token paren, List<Expr> arguments",
                 "Get      : Expr object, Token name",
+                "Super    : Token keyword, Token method",
                 "Grouping : Expr expression",
                 "Literal  : Object value",
                 "Logical  : Expr left, Token operator, Expr right",
@@ -27,7 +28,7 @@ public class GenerateAST {
 
         defineAst(outputDir, "Stmt", Arrays.asList(
                 "Block      : List<Stmt> statements",
-                "Class      : Token name, List<Stmt.Function> methods",
+                "Class      : Token name, Expr.Variable superclass, List<Stmt.Function> methods",
                 "Expression : Expr expression",
                 "Function   : Token name, List<Token> params, List<Stmt> body",
                 "If         : Expr condition, Stmt thenBranch, Stmt elseBranch",

@@ -152,7 +152,7 @@ public class ClassBlackBlackBoxTest extends BaseBlackBoxTest {
                 var foo = Foo();
                 print foo.init();
                 """;
-        runAndAssert(src, "[line 2, column 32] error at 'this': Can't use 'this' outside of a class.\n");
+        runAndAssert(src, "Foo instanceFoo instanceFoo instance");
     }
 
     @Test
@@ -165,5 +165,93 @@ public class ClassBlackBlackBoxTest extends BaseBlackBoxTest {
                 }
                 """;
         runAndAssert(src, "[line 3, column 34] error at 'return': Can't return a value from an initializer.\n");
+    }
+
+    @Test
+    public void testInheritFromNonClass() {
+        String src = """
+                var NotAClass = "I am totally not a class";
+                class Subclass < NotAClass {} // ?!
+                """;
+        runAndAssert(src, "Superclass must be a class.\n" +
+                "[line 2, column 71 ]\n");
+    }
+
+    @Test
+    public void testCallMethodFromSuperClass() {
+        String src = """
+                class Doughnut {
+                  cook() {
+                    print "Fry until golden brown.";
+                  }
+                }
+                            
+                class BostonCream < Doughnut {}
+
+                BostonCream().cook();
+                """;
+        runAndAssert(src, "Fry until golden brown.");
+    }
+
+    @Test
+    public void testSuperKeyword() {
+        String src = """
+                class Doughnut {
+                  cook() {
+                    print "Fry until golden brown.";
+                  }
+                }
+                
+                class BostonCream < Doughnut {
+                  cook() {
+                    super.cook();
+                    print "Pipe full of custard and coat with chocolate.";
+                  }
+                }
+                
+                BostonCream().cook();
+                """;
+        runAndAssert(src, "Fry until golden brown.Pipe full of custard and coat with chocolate.");
+    }
+
+    @Test
+    public void testSuper2() {
+        String src = """
+                class A {
+                  method() {
+                    print "A method";
+                  }
+                }
+                
+                class B < A {
+                  method() {
+                    print "B method";
+                  }
+                
+                  test() {
+                    super.method();
+                  }
+                }
+                
+                class C < B {}
+                
+                C().test();
+                """;
+        runAndAssert(src, "A method");
+    }
+
+    @Test
+    public void testInvalidUseOfSuper() {
+        String src = """
+                class Eclair {
+                  cook() {
+                    super.cook();
+                    print "Pipe full of crème pâtissière.";
+                  }
+                }
+                """;
+
+        String expect = "[line 3, column 36] error at 'super': Can't use 'super' in a class with no superclass.\n";
+        runAndAssert(src, expect);
     }
 }
