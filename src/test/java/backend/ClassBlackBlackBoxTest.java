@@ -154,4 +154,16 @@ public class ClassBlackBlackBoxTest extends BaseBlackBoxTest {
                 """;
         runAndAssert(src, "[line 2, column 32] error at 'this': Can't use 'this' outside of a class.\n");
     }
+
+    @Test
+    public void testReturnFromInit() {
+        String src = """
+                class Foo {
+                  init() {
+                    return "something else";
+                  }
+                }
+                """;
+        runAndAssert(src, "[line 3, column 34] error at 'return': Can't return a value from an initializer.\n");
+    }
 }
